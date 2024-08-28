@@ -14,5 +14,7 @@ public class EditalService extends AbstractService {
         MongoDatabase database = mongoDBConnector.getDatabase("editais");
         this.collection = database.getCollection("editais"); //Precisa conectar, não estou conseguindo
     }
+
+
     
 }
