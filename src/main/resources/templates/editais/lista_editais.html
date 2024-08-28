@@ -12,9 +12,9 @@
         <thead>
         <tr>
             <th>Titulo</th>
-            <th>Coordenador</th>
             <th>Descrição</th>
             <th>Data de lançamento</th>
+            <td>Calendario</td>
             <th>Pré-Requisitos</th>
             <th>Formulário de inscrição</th>
         </tr>
@@ -24,10 +24,7 @@
             <tr>
                 <td th:text="${editais.titulo}">Titulo do Edital</td>
                 <td th:text="${edital.descricao}">Descrição do Edital</td>
-                <td>
-                    <span th:if="${edital.coordenador != null}" th:text="${edital.coordenador.nome}"></span>
-                    <span th:if="${edital.coordenador == null}" style="font-weight: bold;">Sem coordenador</span>
-                </td>                <td th:text="${edital.data}">01/01/2024</td>
+                <td th:text="${edital.data}">01/01/2024</td>
                 <td th:text="${edital.calendario}">Calendário</td>
                 <td th:text="${edital.preRequisitos}">Pré Requisitos</td>
                 <td th:text="${edital.formInscricao}">Formulário de inscrição</td>
