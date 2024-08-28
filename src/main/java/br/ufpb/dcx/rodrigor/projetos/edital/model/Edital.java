@@ -1,7 +1,12 @@
 package br.ufpb.dcx.rodrigor.projetos.edital.model;
 
+import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
+
+import java.util.List;
+
 public class Edital {
     private String titulo, data, descricao, calendario, preRequisitos, formInscricao;
+    private List<Participante> inscritos;
 
     public Edital(String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao) {
         this.titulo = titulo;
@@ -12,7 +17,9 @@ public class Edital {
         this.formInscricao = formInscricao;
     }
 
-    public Edital() {}
+    public Edital() {
+
+    }
 
     public String getTitulo() {
         return titulo;

@@ -10,7 +10,7 @@ class Edital{
 	    -String: preRequisitos
 	    -String: formInscricao
 	    +adicionar(edital Edital) void
-	    +remover() void
+	    +remover(String titulo) void
 	    +listarEditais() List~Edital~
 	    +listarInscritos() List~Participante~
 	}
