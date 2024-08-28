@@ -12,6 +12,8 @@ public class Edital {
         this.formInscricao = formInscricao;
     }
 
+    public Edital() {}
+
     public String getTitulo() {
         return titulo;
     }
