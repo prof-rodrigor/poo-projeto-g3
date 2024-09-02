@@ -11,7 +11,7 @@ public class EditalController {
 
     public void listarEditais(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAIS_SERVICE.key());
-        ctx.attribute("editais", editalService.listarEditais);
+        ctx.attribute("editais", editalService.listarEditais());
         ctx.render("/editais/lista_editais.html");
     }
 
@@ -26,14 +26,14 @@ public class EditalController {
         edital.setData("data");
         edital.setFormInscricao("form inscricao"); //Criar algo relacionado a inscrição no edital
 
-        editalService.adicionarEdital(edital);
+        editalService.adicionar(edital);
         ctx.redirect("/editais");
     }
 
     public void removeEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAIS_SERVICE.key());
         String id = ctx.pathParam("id");
-        editalService.removerProjeto(id);
+        editalService.remover(id);
         ctx.redirect("/editais");
     }
 }
