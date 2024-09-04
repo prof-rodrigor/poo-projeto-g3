@@ -1,6 +1,8 @@
 package br.ufpb.dcx.rodrigor.projetos;
 
 import br.ufpb.dcx.rodrigor.projetos.db.MongoDBConnector;
+import br.ufpb.dcx.rodrigor.projetos.edital.controllers.EditalController;
+import br.ufpb.dcx.rodrigor.projetos.edital.model.Edital;
 import br.ufpb.dcx.rodrigor.projetos.edital.services.EditalService;
 import br.ufpb.dcx.rodrigor.projetos.login.LoginController;
 import br.ufpb.dcx.rodrigor.projetos.participante.controllers.ParticipanteController;
@@ -167,6 +169,12 @@ public class App {
         app.post("/participantes", participanteController::adicionarParticipante);
         app.get("/participantes/{id}/remover", participanteController::removerParticipante);
 
+        EditalController editalController = new EditalController();
+        app.get("/editais", editalController::listarEditais);
+        //adiicionar rota para abrir detalhes do edital
+        //app.get("/editais/novo", editalController::mostrarFormularioCadastro); //Falta adicionar o método
+        app.post("/editais", editalController::adicionarEdital);
+        app.get("/editais/{id}/remover", editalController::removeEdital);
     }
 
     private Properties carregarPropriedades() {
