@@ -8,13 +8,17 @@
 <section>
     <header>
         <h1 th:text="${editais.titulo}">Título do Edital</h1>
-        <h3 th:text="${editais.data}">Data de lançamento</h3>
+        <p th:text="${editais.data}">Data de lançamento</p>
     </header>
     <article>
-        <h3 th:text="${editais.descricao}">Descrição</h3>
-        <h3 th:text="${editais.calendario}">Calendário</h3>
-        <h3 th:text="${editais.preRequisitos}">Pré-Requisitos</h3>
-        <h3 th:text="${editais.formInscricao}">Formulário de Inscrição</h3>
+        <h2>Descrição</h2>
+        <p th:text="${editais.descricao}">Descrição</p>
+        <h2>Calendário</h2>
+        <p th:text="${editais.calendario}">Calendário</p>
+        <h2>Pré-Requisitos</h2>
+        <p th:text="${editais.preRequisitos}">Pré-Requisitos</p>
+        <h2>Formulário de Inscrição</h2>
+        <p th:text="${editais.formInscricao}">Formulário de Inscrição</p>
     </article>
 </section>
 </body>
