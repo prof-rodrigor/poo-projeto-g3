@@ -3,7 +3,6 @@ package br.ufpb.dcx.rodrigor.projetos.edital.services;
 import br.ufpb.dcx.rodrigor.projetos.AbstractService;
 import br.ufpb.dcx.rodrigor.projetos.db.MongoDBConnector;
 import br.ufpb.dcx.rodrigor.projetos.edital.model.Edital;
-import br.ufpb.dcx.rodrigor.projetos.participante.model.CategoriaParticipante;
 import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
 import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
 import com.mongodb.client.MongoCollection;
@@ -37,16 +36,14 @@ public class EditalService extends AbstractService {
         this.collection = database.getCollection("editais");
     }
 
-    public void adicionar(Edital edital){
+    public void adicionarEdital(Edital edital){
         Document doc = editalToDocument(edital);
         collection.insertOne(doc);
     }
 
-    public void remover(String titulo){
+    public void removerProjeto(String titulo){
         collection.deleteOne(eq("titulo", new ObjectId(titulo)));
     }
-
-
 
     public List<Edital> listarEditais(){
         List<Edital> editais = new ArrayList<>();

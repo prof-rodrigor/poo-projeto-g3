@@ -11,7 +11,7 @@ public class EditalController {
 
     public void listarEditais(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAIS_SERVICE.key());
-        ctx.attribute("editais", editalService.listarEditais);
+        ctx.attribute("editais", editalService.listarEditais());
         ctx.render("/editais/lista_editais.html");
     }
 
