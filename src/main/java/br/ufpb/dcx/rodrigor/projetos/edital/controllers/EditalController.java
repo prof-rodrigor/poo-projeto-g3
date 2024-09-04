@@ -31,14 +31,14 @@ public class EditalController {
         edital.setData("data");
         edital.setFormInscricao("form inscricao"); //Criar algo relacionado a inscrição no edital
 
-        editalService.adicionar(edital);
+        editalService.adicionarEdital(edital);
         ctx.redirect("/editais");
     }
 
     public void removeEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAIS_SERVICE.key());
         String id = ctx.pathParam("id");
-        editalService.remover(id);
+        editalService.removerEdital(id);
         ctx.redirect("/editais");
     }
 }

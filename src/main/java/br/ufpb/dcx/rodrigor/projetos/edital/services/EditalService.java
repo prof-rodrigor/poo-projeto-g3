@@ -41,7 +41,7 @@ public class EditalService extends AbstractService {
         collection.insertOne(doc);
     }
 
-    public void removerProjeto(String titulo){
+    public void removerEdital(String titulo){
         collection.deleteOne(eq("titulo", new ObjectId(titulo)));
     }
 
