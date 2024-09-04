@@ -12,22 +12,16 @@
         <thead>
         <tr>
             <th>Titulo</th>
-            <th>Descrição</th>
             <th>Data de lançamento</th>
-            <td>Calendario</td>
-            <th>Pré-Requisitos</th>
-            <th>Formulário de inscrição</th>
         </tr>
         </thead>
         <tbody>
         <th:block th:each="edital : ${editais}">
             <tr>
                 <td th:text="${editais.titulo}">Titulo do Edital</td>
-                <td th:text="${edital.descricao}">Descrição do Edital</td>
                 <td th:text="${edital.data}">01/01/2024</td>
-                <td th:text="${edital.calendario}">Calendário</td>
-                <td th:text="${edital.preRequisitos}">Pré Requisitos</td>
-                <td th:text="${edital.formInscricao}">Formulário de inscrição</td>
+                <td href="/editais/detalhes" class="btn btn-primary mb-3">Detalhes</td>
+                <td href="/editais/inscrição" th:text="${edital.formInscricao}" class="btn btn-primary mb-3">Inscreva-se</td>
                 <td>
                     <button class="btn btn-danger btn-sm" th:data-id="${edital.id}" onclick="removerEdital(this)">
                         Remover
