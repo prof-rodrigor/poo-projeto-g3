@@ -172,7 +172,7 @@ public class App {
         EditalController editalController = new EditalController();
         app.get("/editais", editalController::listarEditais);
         app.get("/editais/novo", editalController::mostrarFormulario);
-        //adiicionar rota para abrir detalhes do edital
+        app.get("/editais/detalhe_edital", editalController::exibirDetalhesEdital);
         app.post("/editais", editalController::adicionarEdital);
         app.get("/editais/{id}/remover", editalController::removeEdital);
     }

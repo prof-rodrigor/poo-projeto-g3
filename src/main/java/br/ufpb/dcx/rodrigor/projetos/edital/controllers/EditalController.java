@@ -41,4 +41,11 @@ public class EditalController {
         editalService.removerEdital(id);
         ctx.redirect("/editais");
     }
+
+    public void exibirDetalhesEdital(Context ctx){
+        EditalService editalService = ctx.appData(Keys.EDITAIS_SERVICE.key());
+        Edital edital = editalService.getEditalDetalhes();
+        ctx.attribute("editais",edital);
+        ctx.render("/editais/detalhe_edital.html");
+    }
 }

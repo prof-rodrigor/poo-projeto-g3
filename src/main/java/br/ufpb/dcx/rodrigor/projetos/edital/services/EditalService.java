@@ -62,6 +62,17 @@ public class EditalService extends AbstractService {
         return inscritos;
     }
 
+    public Edital getEditalDetalhes() {
+        // Precisa buscar no banco
+        return new Edital(
+                "Edital de Concurso Público",
+                "01/09/2024",
+                "Este edital visa a contratação de servidores para a administração pública.",
+                "01/10/2024 - 15/11/2024",
+                "Diploma de nível superior",
+                "Formulário disponível no site oficial");
+    }
+
     public static Edital documentToEdital(Document doc){
         Edital edital = new Edital();
         edital.setTitulo(doc.getString("titulo"));
