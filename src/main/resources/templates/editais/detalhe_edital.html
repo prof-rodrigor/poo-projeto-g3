@@ -1,27 +1,13 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes do Edital</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-<section>
-    <header>
-        <h1 th:text="${editais.titulo}">Título do Edital</h1>
-        <p th:text="${editais.data}">Data de lançamento</p>
-    </header>
-    <article>
-        <h>Id</h>
-        <p th:text="${editais.id}">Id</p>
-        <h2>Descrição</h2>
-        <p th:text="${editais.descricao}">Descrição</p>
-        <h2>Calendário</h2>
-        <p th:text="${editais.calendario}">Calendário</p>
-        <h2>Pré-Requisitos</h2>
-        <p th:text="${editais.preRequisitos}">Pré-Requisitos</p>
-        <h2>Formulário de Inscrição</h2>
-        <p th:text="${editais.formInscricao}">Formulário de Inscrição</p>
-    </article>
-</section>
+
 </body>
 </html>
