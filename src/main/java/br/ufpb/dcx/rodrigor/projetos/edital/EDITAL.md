@@ -3,6 +3,7 @@
 ```mermaid
 classDiagram
 class Edital{
+		-String: id
 		-String: titulo
 		-String: data
 		-String: descricao
