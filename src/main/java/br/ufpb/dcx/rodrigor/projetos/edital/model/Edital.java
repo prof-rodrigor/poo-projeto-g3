@@ -1,14 +1,17 @@
 package br.ufpb.dcx.rodrigor.projetos.edital.model;
 
 import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
+import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Edital {
     private String id, titulo, data, descricao, calendario, preRequisitos, formInscricao;
+    Participante coordenador;
     private List<Participante> inscritos;
 
-    public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao) {
+    public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao, Participante coordenador) {
         this.id = id;
         this.titulo = titulo;
         this.data = data;
@@ -16,6 +19,7 @@ public class Edital {
         this.calendario = calendario;
         this.preRequisitos = preRequisitos;
         this.formInscricao = formInscricao;
+        this.coordenador = coordenador;
     }
 
     public Edital() {
@@ -76,5 +80,13 @@ public class Edital {
 
     public void setFormInscricao(String formInscricao) {
         this.formInscricao = formInscricao;
+    }
+
+    public Participante getCoordenador() {
+        return coordenador;
+    }
+
+    public void setCoordenador(Participante coordenador) {
+        this.coordenador = coordenador;
     }
 }
