@@ -5,10 +5,11 @@ import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
 import java.util.List;
 
 public class Edital {
-    private String titulo, data, descricao, calendario, preRequisitos, formInscricao;
+    private String id, titulo, data, descricao, calendario, preRequisitos, formInscricao;
     private List<Participante> inscritos;
 
-    public Edital(String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao) {
+    public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao) {
+        this.id = id;
         this.titulo = titulo;
         this.data = data;
         this.descricao = descricao;
@@ -19,6 +20,14 @@ public class Edital {
 
     public Edital() {
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitulo() {

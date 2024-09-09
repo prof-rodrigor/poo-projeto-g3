@@ -5,6 +5,7 @@ import br.ufpb.dcx.rodrigor.projetos.db.MongoDBConnector;
 import br.ufpb.dcx.rodrigor.projetos.edital.model.Edital;
 import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
 import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
+import br.ufpb.dcx.rodrigor.projetos.projeto.model.Projeto;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -26,12 +27,6 @@ public class EditalService extends AbstractService {
 
     public EditalService(MongoDBConnector mongoDBConnector) {
         super(mongoDBConnector);
-        Participante p1 = new Participante();
-        Participante p2 = new Participante();
-        Participante p3 = new Participante();
-        p1.setNome("Joao");
-        p2.setNome("Maria");
-        p3.setNome("Katia");
         MongoDatabase database = mongoDBConnector.getDatabase("editais");
         this.collection = database.getCollection("editais");
     }
@@ -39,10 +34,11 @@ public class EditalService extends AbstractService {
     public void adicionarEdital(Edital edital){
         Document doc = editalToDocument(edital);
         collection.insertOne(doc);
+        edital.setId(doc.getObjectId("_id").toString());
     }
 
-    public void removerEdital(String titulo){
-        collection.deleteOne(eq("titulo", new ObjectId(titulo)));
+    public void removerEdital(String id){
+        collection.deleteOne(eq("_id", new ObjectId(id)));
     }
 
     public List<Edital> listarEditais(){
@@ -51,6 +47,11 @@ public class EditalService extends AbstractService {
             editais.add(documentToEdital(doc));
         }
         return editais;
+    }
+
+    public void atualizarEdital(Edital editalAtualizado) {
+        Document doc = editalToDocument(editalAtualizado);
+        collection.replaceOne(eq("_id", new ObjectId(editalAtualizado.getId())), doc);
     }
 
     public List<Participante> listarParticipantes(Context ctx){
@@ -65,6 +66,7 @@ public class EditalService extends AbstractService {
     public Edital getEditalDetalhes() {
         // Precisa buscar no banco
         return new Edital(
+                "id",
                 "Edital de Concurso Público",
                 "01/09/2024",
                 "Este edital visa a contratação de servidores para a administração pública.",
@@ -75,6 +77,7 @@ public class EditalService extends AbstractService {
 
     public static Edital documentToEdital(Document doc){
         Edital edital = new Edital();
+        edital.setId(doc.getObjectId("_id").toString());
         edital.setTitulo(doc.getString("titulo"));
         edital.setData(doc.getString("data"));
         edital.setDescricao(doc.getString("descricao"));
@@ -86,6 +89,9 @@ public class EditalService extends AbstractService {
 
     public static Document editalToDocument(Edital edital){
         Document doc = new Document();
+        if (edital.getId() != null) {
+            doc.put("_id", new ObjectId(edital.getId()));
+        }
         doc.put("titulo", edital.getTitulo());
         doc.put("data", edital.getData());
         doc.put("descricao", edital.getDescricao());
