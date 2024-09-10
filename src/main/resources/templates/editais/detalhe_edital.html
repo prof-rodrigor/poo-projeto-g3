@@ -1,13 +1,25 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Edital</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Referência ao seu CSS -->
 </head>
 <body>
+<h1>Detalhes do Edital</h1>
 
+<div class="edital-detalhes" th:if="${editais.isPresent()}">
+    <h2 th:text="${editais.get().titulo}">Título do Edital</h2>
+    <p><strong>Data:</strong> <span th:text="${editais.get().data}">Data do Edital</span></p>
+    <p><strong>Descrição:</strong> <span th:text="${editais.get().descricao}">Descrição do Edital</span></p>
+    <p><strong>Calendário:</strong> <span th:text="${editais.get().calendario}">Calendário do Edital</span></p>
+    <p><strong>Pré-requisitos:</strong> <span th:text="${editais.get().preRequisitos}">Pré-requisitos do Edital</span></p>
+    <p><strong>Formulário de Inscrição:</strong> <span th:text="${editais.get().formInscricao}">Formulário de Inscrição do Edital</span></p>
+    <p><strong>Coordenador:</strong> <span th:text="${editais.get().coordenador.nome}">Nome do Coordenador</span></p>
+</div>
+
+<!-- Link para voltar para a lista de editais -->
+<a href="/editais" class="btn-voltar">Voltar à Lista</a>
 </body>
 </html>
