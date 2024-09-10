@@ -11,8 +11,8 @@ public class Edital {
     Participante coordenador;
     private List<Participante> inscritos;
 
-    public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao, Participante coordenador) {
-        this.id = id;
+    public Edital(String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao, Participante coordenador) {
+        this.id = null;
         this.titulo = titulo;
         this.data = data;
         this.descricao = descricao;

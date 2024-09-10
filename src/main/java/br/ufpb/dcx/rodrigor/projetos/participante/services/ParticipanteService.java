@@ -21,7 +21,7 @@ public class ParticipanteService extends AbstractService {
 
     public ParticipanteService(MongoDBConnector mongoDBConnector) {
         super(mongoDBConnector);
-        MongoDatabase database = mongoDBConnector.getDatabase("projetos");
+        MongoDatabase database = mongoDBConnector.getDatabase("editais");
         this.collection = database.getCollection("participantes");
     }
 

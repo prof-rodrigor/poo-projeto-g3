@@ -1,13 +1,48 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Adicionar Edital</title>
 </head>
 <body>
-
+<section>
+    <h2 class="mt-5">Novo Edital</h2>
+    <form action="/editais" method="post">
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título do Edital:</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+        <div class="mb-3">
+            <label for="data" class="form-label">Data:</label>
+            <input type="date" class="form-control" id="data" name="data" required>
+        </div>
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição</label>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="calendario" class="form-label">Calendário:</label>
+            <input type="text" class="form-control" id="calendario" name="calendario" required>
+        </div>
+        <div class="mb-3">
+            <label for="pre-requisitos" class="form-label">Pré-requisitos:</label>
+            <input type="text" class="form-control" id="pre-requisitos" name="pre-requisitos" required>
+        </div>
+        <div class="mb-3">
+            <label for="formulario" class="form-label">Formulário de Inscrição:</label>
+            <input type="text" class="form-control" id="formulario" name="formulario" required>
+        </div>
+        <div class="mb-3">
+            <label for="coordenador" class="form-label">Coordenador</label>
+            <select class="form-select" id="coordenador" name="coordenador" required>
+                <option value="">Selecione um coordenador</option>
+                <th:block th:each="professor : ${professores}">
+                    <option th:value="${professor.id}" th:text="${professor.nome}"></option>
+                </th:block>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="/editais" class="btn btn-secondary">Cancelar</a>
+    </form>
+</section>
 </body>
 </html>

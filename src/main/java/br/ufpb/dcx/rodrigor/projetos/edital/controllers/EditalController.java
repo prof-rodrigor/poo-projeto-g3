@@ -7,22 +7,24 @@ import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
 import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
 import io.javalin.http.Context;
 
+import java.util.Optional;
+
 public class EditalController {
 
     public void listarEditais(Context ctx) {
-        EditalService editalService = ctx.appData(Keys.EDITAl_SERVICE.key());
+        EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ctx.attribute("editais", editalService.listarEditais());
-        ctx.render("editais/lista_editais.html");
+        ctx.render("/editais/lista_editais.html");
     }
 
     public void mostrarFormulario(Context ctx) {
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
-        ctx.attribute("coodenadores", participanteService.listarProfessores());
-        ctx.render("editais/form-editais.html");
+        ctx.attribute("professores", participanteService.listarProfessores());
+        ctx.render("/editais/form-editais.html");
     }
 
     public void adicionarEdital(Context ctx) {
-        EditalService editalService = ctx.appData(Keys.EDITAl_SERVICE.key());
+        EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
 
         Edital edital = new Edital();
@@ -36,23 +38,24 @@ public class EditalController {
         String coordenadorId = ctx.formParam("coodenador");
         Participante coodenador = participanteService.buscarParticipantePorId(coordenadorId)
                 .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
+
         edital.setCoordenador(coodenador);
         editalService.adicionarEdital(edital);
         ctx.redirect("/editais");
     }
 
     public void editarEdital(Context ctx) {
-        EditalService editalService = ctx.appData(Keys.EDITAl_SERVICE.key());
+        EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
 
         String id = ctx.pathParam("id");
         Edital updateEdital = new Edital();
         updateEdital.setTitulo("titulo");
-        updateEdital.setData("titulo");
-        updateEdital.setDescricao("titulo");
-        updateEdital.setCalendario("titulo");
-        updateEdital.setPreRequisitos("titulo");
-        updateEdital.setFormInscricao("formulario");
+        updateEdital.setData(ctx.formParam("titulo"));
+        updateEdital.setDescricao(ctx.formParam("descricao"));
+        updateEdital.setCalendario(ctx.formParam("calendario"));
+        updateEdital.setPreRequisitos(ctx.formParam("pre-requisitos"));
+        updateEdital.setFormInscricao(ctx.formParam("formulario"));
 
         String coordenadorId = ctx.formParam("coodenador");
         Participante coodenador = participanteService.buscarParticipantePorId(coordenadorId)
@@ -62,12 +65,12 @@ public class EditalController {
     }
 
     public void exibirDetalhesEdital(Context ctx) {
-        EditalService editalService = ctx.appData(Keys.EDITAl_SERVICE.key());
+        EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
 
         String id = ctx.pathParam("id");
-        Edital edital = editalService.buscarEditalPorId(id);
+        Optional<Edital> edital = editalService.buscarEditalPorId(id);
 
-        if (edital != null) {
+        if (edital.isPresent()) {
             ctx.attribute("editais", edital);
             ctx.render("editais/detalhes-edital.html");
         } else {
@@ -76,7 +79,7 @@ public class EditalController {
     }
 
     public void removerEdital(Context ctx) {
-        EditalService editalService = ctx.appData(Keys.EDITAl_SERVICE.key());
+        EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         String id = ctx.pathParam("id");
         editalService.removerEdital(id);
         ctx.redirect("/editais");

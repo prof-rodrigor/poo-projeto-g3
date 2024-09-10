@@ -17,6 +17,7 @@ import javax.xml.xpath.XPathEvaluationResult;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -35,11 +36,12 @@ public class EditalService extends AbstractService {
     public void adicionarEdital(Edital edital){
         Document doc = editalToDocument(edital);
         collection.insertOne(doc);
+        edital.setId(doc.getObjectId("_id").toString());
     }
 
     // Remover
     public void removerEdital(String id){
-        collection.deleteOne(eq("id", new ObjectId(id)));
+        collection.deleteOne(eq("_id", new ObjectId(id)));;
     }
 
     // Listar
@@ -70,14 +72,9 @@ public class EditalService extends AbstractService {
     }
 
     // Exibir Detalhes
-    public Edital buscarEditalPorId(String id){
-        Document doc = collection.find(Filters.eq("_id", id)).first();
-
-        if (doc != null){
-            return documentToEdital(doc);
-        }else {
-            return null;
-        }
+    public Optional<Edital> buscarEditalPorId(String id){
+        Document doc = collection.find(eq("_id", new ObjectId(id))).first();
+        return Optional.ofNullable(doc).map(this::documentToEdital);
     }
 
     public Edital documentToEdital(Document doc){
@@ -93,7 +90,7 @@ public class EditalService extends AbstractService {
         //Se tiver coordenador
         ObjectId coordenadorId = doc.getObjectId("coordenador");
         if (coordenadorId != null){
-            Participante coordenador = participanteService.buscarParticipantePorId(String.valueOf(coordenadorId)) // Testando
+            Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId.toString()) // Testando
                     .orElse(null);
             edital.setCoordenador(coordenador);
         }
@@ -104,7 +101,7 @@ public class EditalService extends AbstractService {
     public Document editalToDocument(Edital edital){
         Document doc = new Document();
         if (edital.getId() != null){
-            doc.put("id", new ObjectId(edital.getId()));
+            doc.put("_id", new ObjectId(edital.getId()));
         }
 
         doc.put("titulo", edital.getTitulo());
@@ -114,6 +111,9 @@ public class EditalService extends AbstractService {
         doc.put("preRequisitos", edital.getPreRequisitos());
         doc.put("formInscricao", edital.getFormInscricao());
 
+        if (edital.getCoordenador() != null) {
+            doc.put("coordenador", new ObjectId(String.valueOf(edital.getCoordenador().getId())));
+        }
         return doc;
     }
 }
