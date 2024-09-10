@@ -8,11 +8,10 @@ import java.util.Optional;
 
 public class Edital {
     private String id, titulo, data, descricao, calendario, preRequisitos, formInscricao;
-    Participante coordenador;
-    private List<Participante> inscritos;
+    private Participante coordenador;
 
-    public Edital(String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao, Participante coordenador) {
-        this.id = null;
+    public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao, Participante coordenador) {
+        this.id = id;
         this.titulo = titulo;
         this.data = data;
         this.descricao = descricao;
