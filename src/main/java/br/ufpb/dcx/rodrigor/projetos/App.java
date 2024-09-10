@@ -172,9 +172,9 @@ public class App {
         EditalController editalController = new EditalController();
         app.get("/editais", editalController::listarEditais);
         app.get("/editais/novo", editalController::mostrarFormulario);
-        app.get("/editais/detalhe_edital", editalController::exibirDetalhesEdital);
+        app.get("/editais/{id}/detalhe_edital", editalController::exibirDetalhesEdital);
         app.post("/editais", editalController::adicionarEdital);
-        app.get("/editais/{id}/remover", editalController::removeEdital);
+        app.get("/editais/{id}/remover", editalController::removerEdital);
     }
 
     private Properties carregarPropriedades() {
