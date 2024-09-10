@@ -34,7 +34,7 @@ public class LoginController {
     }
 
     public void logout(Context ctx) {
-        ctx.sessionAttribute("usuario", null);
+        ctx.req().getSession().invalidate();
         ctx.redirect("/login");
     }
 }
