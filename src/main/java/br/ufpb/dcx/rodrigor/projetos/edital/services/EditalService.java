@@ -5,6 +5,7 @@ import br.ufpb.dcx.rodrigor.projetos.db.MongoDBConnector;
 import br.ufpb.dcx.rodrigor.projetos.edital.model.Edital;
 import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
 import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
+import br.ufpb.dcx.rodrigor.projetos.projeto.model.Projeto;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -14,6 +15,7 @@ import io.javalin.http.Context;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static br.ufpb.dcx.rodrigor.projetos.Keys.EDITAIS_SERVICE;
 import static com.mongodb.client.model.Filters.eq;
@@ -39,10 +41,11 @@ public class EditalService extends AbstractService {
     public void adicionarEdital(Edital edital){
         Document doc = editalToDocument(edital);
         collection.insertOne(doc);
+        edital.setId(doc.getObjectId("_id").toString());
     }
 
-    public void removerEdital(String titulo){
-        collection.deleteOne(eq("titulo", new ObjectId(titulo)));
+    public void removerEdital(String id){
+        collection.deleteOne(eq("_id", new ObjectId(id)));
     }
 
     public List<Edital> listarEditais(){
@@ -61,10 +64,16 @@ public class EditalService extends AbstractService {
         }
         return inscritos;
     }
+    public Edital buscarEditalPorId(String id) {
+        Document doc = collection.find(eq("_id", new ObjectId(id))).first();
+        Optional<Edital> a = Optional.ofNullable(doc).map(this::documentToEdital);
+        return a.get();
+    }
 
     public Edital getEditalDetalhes() {
         // Precisa buscar no banco
         return new Edital(
+                "1",
                 "Edital de Concurso Público",
                 "01/09/2024",
                 "Este edital visa a contratação de servidores para a administração pública.",
@@ -73,8 +82,9 @@ public class EditalService extends AbstractService {
                 "Formulário disponível no site oficial");
     }
 
-    public static Edital documentToEdital(Document doc){
+    public Edital documentToEdital(Document doc){
         Edital edital = new Edital();
+        edital.setId(doc.getObjectId("_id").toString());
         edital.setTitulo(doc.getString("titulo"));
         edital.setData(doc.getString("data"));
         edital.setDescricao(doc.getString("descricao"));
@@ -84,8 +94,11 @@ public class EditalService extends AbstractService {
         return edital;
     }
 
-    public static Document editalToDocument(Edital edital){
+    public Document editalToDocument(Edital edital){
         Document doc = new Document();
+        if (edital.getId() != null) {
+            doc.put("_id", new ObjectId(edital.getId()));
+        }
         doc.put("titulo", edital.getTitulo());
         doc.put("data", edital.getData());
         doc.put("descricao", edital.getDescricao());
