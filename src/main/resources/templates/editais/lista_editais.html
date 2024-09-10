@@ -12,8 +12,6 @@
         <thead>
         <tr>
             <th>Título</th>
-            <th>Descrição</th>
-            <th>Coordenador</th>
             <th>Data</th>
             <th>Ações</th>
         </tr>
@@ -22,14 +20,9 @@
         <th:block th:each="edital : ${editais}">
             <tr>
                 <td th:text="${edital.titulo}">Título do Edital</td>
-                <td th:text="${edital.descricao}">Descrição do Edital</td>
-                <td>
-                    <span th:if="${edital.coordenador != null}" th:text="${edital.coordenador.nome}"></span>
-                    <span th:if="${edital.coordenador == null}" style="font-weight: bold;">Sem coordenador</span>
-                </td>
                 <td th:text="${edital.data}">01/01/2023</td>
                 <td>
-                    <a class="btn btn-info btn-sm" th:href="@{/editais/{id}(id=${edital.id})}" role="button">
+                    <a class="btn btn-info btn-sm" th:href="@{/editais/detalhe/{id}(id=${edital.id})}" role="button">
                         Detalhes
                     </a>
                     <button class="btn btn-danger btn-sm" th:data-id="${edital.id}" onclick="removerEdital(this)">
