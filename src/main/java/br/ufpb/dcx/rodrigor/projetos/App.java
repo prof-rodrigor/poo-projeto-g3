@@ -48,17 +48,19 @@ public class App {
         });
 
     }
+
     private void registrarServicos(JavalinConfig config, MongoDBConnector mongoDBConnector) {
-        /*EditalService editalService = new EditalService(mongoDBConnector);*/
+        /* EditalService editalService = new EditalService(mongoDBConnector); */
         ParticipanteService participanteService = new ParticipanteService(mongoDBConnector);
         config.appData(Keys.PROJETO_SERVICE.key(), new ProjetoService(mongoDBConnector, participanteService));
         config.appData(Keys.EDITAL_SERVICE.key(), new EditalService(mongoDBConnector, participanteService));
         config.appData(Keys.PARTICIPANTE_SERVICE.key(), participanteService);
 
         /*
-        config.appData(Keys.EDITAIS_SERVICE.key(), editalService);
-*/
+         * config.appData(Keys.EDITAIS_SERVICE.key(), editalService);
+         */
     }
+
     private void configurarPaginasDeErro(Javalin app) {
         app.error(404, ctx -> ctx.render("erro_404.html"));
         app.error(500, ctx -> ctx.render("erro_500.html"));
@@ -105,7 +107,8 @@ public class App {
             try {
                 return Integer.parseInt(propriedades.getProperty(PROP_PORTA_SERVIDOR));
             } catch (NumberFormatException e) {
-                logger.error("Porta definida no arquivo de propriedades não é um número válido: '{}'", propriedades.getProperty(PROP_PORTA_SERVIDOR));
+                logger.error("Porta definida no arquivo de propriedades não é um número válido: '{}'",
+                        propriedades.getProperty(PROP_PORTA_SERVIDOR));
                 System.exit(1);
             }
         } else {
@@ -130,7 +133,8 @@ public class App {
         String connectionString = propriedades.getProperty(PROP_MONGODB_CONNECTION_STRING);
         logger.info("Lendo string de conexão ao MongoDB a partir do application.properties");
         if (connectionString == null) {
-            logger.error("O string de conexão ao MongoDB não foi definido no arquivo /src/main/resources/application.properties");
+            logger.error(
+                    "O string de conexão ao MongoDB não foi definido no arquivo /src/main/resources/application.properties");
             logger.error("Defina a propriedade '{}' no arquivo de propriedades", PROP_MONGODB_CONNECTION_STRING);
             System.exit(1);
         }
@@ -147,6 +151,12 @@ public class App {
     }
 
     private void configurarRotas(Javalin app) {
+        app.before(ctx -> {
+            // Se a rota não for /login e o usuário não estiver autenticado
+            if (!ctx.path().equals("/login") && ctx.sessionAttribute("usuario") == null) {
+                ctx.redirect("/login");
+            }
+        });
         LoginController loginController = new LoginController();
         app.get("/", ctx -> ctx.redirect("/login"));
         app.get("/login", loginController::mostrarPaginaLogin);
@@ -184,9 +194,10 @@ public class App {
     private Properties carregarPropriedades() {
         Properties prop = new Properties();
         try (InputStream input = App.class.getClassLoader().getResourceAsStream("application.properties")) {
-            if(input == null){
+            if (input == null) {
                 logger.error("Arquivo de propriedades /src/main/resources/application.properties não encontrado");
-                logger.error("Use o arquivo application.properties.examplo como base para criar o arquivo application.properties");
+                logger.error(
+                        "Use o arquivo application.properties.examplo como base para criar o arquivo application.properties");
                 System.exit(1);
             }
             prop.load(input);
