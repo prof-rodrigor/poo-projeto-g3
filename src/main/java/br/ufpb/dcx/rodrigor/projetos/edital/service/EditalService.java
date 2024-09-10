@@ -9,12 +9,12 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import javax.xml.xpath.XPathEvaluationResult;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +24,9 @@ import static com.mongodb.client.model.Filters.eq;
 public class EditalService extends AbstractService {
     private final MongoCollection<Document> collection;
     private final ParticipanteService participanteService;
+
+    private static final Logger logger = LogManager.getLogger();
+
 
     public EditalService(MongoDBConnector mongoDBConnector, ParticipanteService participanteService) {
         super(mongoDBConnector);
@@ -41,7 +44,7 @@ public class EditalService extends AbstractService {
 
     // Remover
     public void removerEdital(String id){
-        collection.deleteOne(eq("_id", new ObjectId(id)));;
+        collection.deleteOne(eq("_id", new ObjectId(id)));
     }
 
     // Listar
@@ -64,7 +67,8 @@ public class EditalService extends AbstractService {
                 Updates.set("calendario", updateEdital.getCalendario()),
                 Updates.set("preRequisitos", updateEdital.getPreRequisitos()),
                 Updates.set("formInscricao", updateEdital.getFormInscricao()),
-                Updates.set("coordenador", coordenador.getId())
+                Updates.set("coordenador", new ObjectId(coordenador.getId().toString()))  // Adiciona corretamente o ObjectId do coordenador
+
 
         );
 
@@ -72,14 +76,14 @@ public class EditalService extends AbstractService {
     }
 
     // Exibir Detalhes
-    public Optional<Edital> buscarEditalPorId(String id){
+    public Optional<Edital> buscarEditalPorId(String id) {
         Document doc = collection.find(eq("_id", new ObjectId(id))).first();
         return Optional.ofNullable(doc).map(this::documentToEdital);
     }
 
     public Edital documentToEdital(Document doc){
         Edital edital = new Edital();
-        edital.setId(doc.getString("_id"));
+        edital.setId(doc.getObjectId("_id").toString());
         edital.setTitulo(doc.getString("titulo"));
         edital.setData(doc.getString("data"));
         edital.setDescricao(doc.getString("descricao"));
@@ -89,8 +93,11 @@ public class EditalService extends AbstractService {
 
         //Se tiver coordenador
         ObjectId coordenadorId = doc.getObjectId("coordenador");
-        if (coordenadorId != null){
-            Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId.toString()) // Testando
+
+        if (coordenadorId == null) {
+            logger.warn("Edital '{}' não possui coordenador", edital.getTitulo());
+        } else {
+            Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId.toString())
                     .orElse(null);
             edital.setCoordenador(coordenador);
         }
@@ -112,7 +119,7 @@ public class EditalService extends AbstractService {
         doc.put("formInscricao", edital.getFormInscricao());
 
         if (edital.getCoordenador() != null) {
-            doc.put("coordenador", new ObjectId(String.valueOf(edital.getCoordenador().getId())));
+            doc.put("coordenador", new ObjectId((edital.getCoordenador().getId().toString())));
         }
         return doc;
     }
