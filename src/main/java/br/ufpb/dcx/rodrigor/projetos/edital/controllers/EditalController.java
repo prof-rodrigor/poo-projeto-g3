@@ -22,7 +22,7 @@ public class EditalController {
     public void mostrarFormulario(Context ctx) {
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
         ctx.attribute("professores", participanteService.listarProfessores());
-        ctx.render("/editais/form-editais.html");
+        ctx.render("/editais/form-editais");
     }
 
     public void adicionarEdital(Context ctx) {
@@ -54,8 +54,13 @@ public class EditalController {
         String id = ctx.pathParam("id");
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         Optional<Edital> edital = editalService.buscarEditalPorId(id);
-        ctx.attribute("edital", edital);
-        ctx.render("form-editais.html");
+
+        if (edital.isPresent()) {
+            ctx.attribute("edital", edital.get());
+            ctx.render("/editais/form-editais.html");
+        } else {
+            ctx.status(404).result("Edital não encontrado.");
+        }
     }
 
     // Processa as mudanças
@@ -64,20 +69,32 @@ public class EditalController {
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
 
         String id = ctx.pathParam("id");
+        Optional<Edital> editalExistente = editalService.buscarEditalPorId(id);
 
-        Edital edital = new Edital();
-        edital.setTitulo(ctx.formParam("titulo"));
-        edital.setData(ctx.formParam("data"));  // Correção da variável "data"
-        edital.setDescricao(ctx.formParam("descricao"));
-        edital.setCalendario(ctx.formParam("calendario"));
-        edital.setPreRequisitos(ctx.formParam("pre-requisitos"));
-        edital.setFormInscricao(ctx.formParam("formulario"));
+        if (editalExistente.isPresent()) {
+            Edital edital = editalExistente.get();
+            edital.setTitulo(ctx.formParam("titulo"));
+            edital.setData(ctx.formParam("data"));
+            edital.setDescricao(ctx.formParam("descricao"));
+            edital.setCalendario(ctx.formParam("calendario"));
+            edital.setPreRequisitos(ctx.formParam("pre-requisitos"));
+            edital.setFormInscricao(ctx.formParam("formulario"));
 
-        String coordenadorId = ctx.formParam("coordenador");
-        Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
-                .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
-        editalService.editarEdital(id, edital, coordenador);
-        ctx.redirect("/detalhe-edital/" + id);
+            String coordenadorId = ctx.formParam("coordenador");
+            Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
+                    .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
+
+            if (coordenador.getCategoria() != CategoriaParticipante.PROFESSOR) {
+                throw new IllegalArgumentException("Somente professores podem ser coordenadores.");
+            }
+            edital.setCoordenador(coordenador);
+
+            // Atualizar o edital
+            editalService.editarEdital(id, edital, coordenador);
+            ctx.redirect("/editais");
+        } else {
+            ctx.status(404).result("Edital não encontrado.");
+        }
     }
 
     public void exibirDetalhesEdital(Context ctx) {
