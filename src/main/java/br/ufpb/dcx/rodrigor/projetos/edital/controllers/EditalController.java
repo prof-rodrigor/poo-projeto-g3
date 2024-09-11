@@ -10,7 +10,6 @@ import io.javalin.http.Context;
 
 import java.util.Optional;
 
-
 public class EditalController {
 
     public void listarEditais(Context ctx) {
@@ -21,6 +20,8 @@ public class EditalController {
 
     public void mostrarFormulario(Context ctx) {
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
+        Edital novoEdital = new Edital();
+        ctx.attribute("edital", novoEdital);
         ctx.attribute("professores", participanteService.listarProfessores());
         ctx.render("/editais/form-editais");
     }
