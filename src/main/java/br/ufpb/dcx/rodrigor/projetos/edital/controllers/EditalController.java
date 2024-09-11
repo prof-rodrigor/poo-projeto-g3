@@ -49,23 +49,34 @@ public class EditalController {
         ctx.redirect("/editais");
     }
 
+    // Exibe o form para edição, reaproveitando o forms de criação
+    public void mostrarFormularioEditar(Context ctx){
+        String id = ctx.pathParam("id");
+        EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
+        Optional<Edital> edital = editalService.buscarEditalPorId(id);
+        ctx.attribute("edital", edital);
+        ctx.render("form-editais.html");
+    }
+
+    // Processa as mudanças
     public void editarEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
 
         String id = ctx.pathParam("id");
-        Edital updateEdital = new Edital();
-        updateEdital.setTitulo(ctx.formParam("titulo"));
-        updateEdital.setData(ctx.formParam("data"));  // Correção da variável "data"
-        updateEdital.setDescricao(ctx.formParam("descricao"));
-        updateEdital.setCalendario(ctx.formParam("calendario"));
-        updateEdital.setPreRequisitos(ctx.formParam("pre-requisitos"));
-        updateEdital.setFormInscricao(ctx.formParam("formulario"));
 
-        String coordenadorId = ctx.formParam("coodenador");
+        Edital edital = new Edital();
+        edital.setTitulo(ctx.formParam("titulo"));
+        edital.setData(ctx.formParam("data"));  // Correção da variável "data"
+        edital.setDescricao(ctx.formParam("descricao"));
+        edital.setCalendario(ctx.formParam("calendario"));
+        edital.setPreRequisitos(ctx.formParam("pre-requisitos"));
+        edital.setFormInscricao(ctx.formParam("formulario"));
+
+        String coordenadorId = ctx.formParam("coordenador");
         Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
                 .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
-        editalService.editarEdital(id, updateEdital, coordenador);
+        editalService.editarEdital(id, edital, coordenador);
         ctx.redirect("/detalhe-edital/" + id);
     }
 

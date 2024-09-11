@@ -68,8 +68,6 @@ public class EditalService extends AbstractService {
                 Updates.set("preRequisitos", updateEdital.getPreRequisitos()),
                 Updates.set("formInscricao", updateEdital.getFormInscricao()),
                 Updates.set("coordenador", new ObjectId(coordenador.getId().toString()))  // Adiciona corretamente o ObjectId do coordenador
-
-
         );
 
         collection.updateOne(filtro, updates);
