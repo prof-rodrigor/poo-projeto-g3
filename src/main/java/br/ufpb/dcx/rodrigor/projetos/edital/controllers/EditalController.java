@@ -28,7 +28,7 @@ public class EditalController {
     public void adicionarEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
-
+        validacao(ctx);
         Edital edital = new Edital();
         edital.setTitulo(ctx.formParam("titulo"));
         edital.setData(ctx.formParam("data"));
@@ -56,7 +56,7 @@ public class EditalController {
     public void editarEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
-
+        validacao(ctx);
         String id = ctx.pathParam("id");
         Edital updateEdital = new Edital();
         updateEdital.setTitulo(ctx.formParam("titulo"));
@@ -106,5 +106,27 @@ public class EditalController {
             }
         }
         return calendario.toString();
+    }
+
+    public void validacao(Context ctx) {
+        String erro = null;
+
+        if (ctx.formParam("id") == null || ctx.formParam("id").trim().isEmpty()) {
+            erro = "ID não pode ser nulo ou vazio.";
+        } else if (ctx.formParam("titulo") == null || ctx.formParam("titulo").trim().isEmpty() || ctx.formParam("titulo").length() > 30) {
+            erro = "Título não pode ser nulo ou vazio.";
+        } else if (ctx.formParam("data") == null || ctx.formParam("data").trim().isEmpty()) {
+            erro = "Data não pode ser nula ou vazia.";
+        } else if (ctx.formParam("descricao") == null || ctx.formParam("descricao").length() > 300) {
+            erro = "Descrição não pode exceder 300 caracteres.";
+        } else if (ctx.formParam("pre-requisitos") != null && ctx.formParam("pre-requisitos").length() > 250) {
+            erro = "Pré-requisitos não podem exceder 250 caracteres.";
+        } else if (ctx.formParam("formulario") == null || ctx.formParam("formulario").trim().isEmpty()) {
+            erro = "Formulário de inscrição não pode ser nulo ou vazio.";
+        }
+        if (erro != null) {
+            ctx.sessionAttribute("erro", erro);
+            ctx.redirect("/formulario");
+        }
     }
 }
