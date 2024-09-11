@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <head>
-    <title>Adicionar Edital</title>
+    <title th:text="${edital.id != null ? 'Editar Edital' : 'Novo Edital'}">Novo Edital</title>
 </head>
 <body>
 <section>
-    <h2 class="mt-5">Novo Edital</h2>
-    <form action="/editais" method="post">
+    <h2 th:text="${edital.id != null ? 'Editar Edital' : 'Novo Edital'}" class="mt-5"></h2>
+    <form th:action="@{${edital.id != null ? '/editais/' + edital.id + '/editar' : '/editais'}}" method="post">
         <div class="mb-3">
             <label for="titulo" class="form-label">Título do Edital:</label>
             <input type="text" class="form-control" id="titulo" name="titulo" required>
@@ -40,7 +40,7 @@
                 </th:block>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button th:text="${edital.id != null ? 'Salvar Alterações' : 'Criar Edital'}" type="submit" class="btn btn-primary"></button>
         <a href="/editais" class="btn btn-secondary">Cancelar</a>
     </form>
 </section>
