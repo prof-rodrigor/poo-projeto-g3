@@ -23,6 +23,21 @@
             <label for="calendario" class="form-label">Calendário:</label>
             <input type="text" class="form-control" id="calendario" name="calendario" required>
         </div>
+        <!--<div class="mb-3" id="calendario">
+            <label class="form-label">Calendário:</label>
+            <div class="atividade mb-3">
+                <div class="mb-3">
+                    <label>Data/Horário:</label>
+                    <input type="text" class="form-control" name="dataHorario[]">
+                </div>
+                <div class="mb-3">
+                    <label>Descrição:</label>
+                    <textarea class="form-control" name="atividade[]"></textarea>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="adicionarAtividade()">Adicionar outra data</button>
+
+        </div>-->
         <div class="mb-3">
             <label for="pre-requisitos" class="form-label">Pré-requisitos:</label>
             <input type="text" class="form-control" id="pre-requisitos" name="pre-requisitos" required>
@@ -44,5 +59,32 @@
         <a href="/editais" class="btn btn-secondary">Cancelar</a>
     </form>
 </section>
+
+<!--<script>
+    let atividadeIndex = 0;
+
+function adicionarAtividade() {
+    console.log('Função adicionarAtividade chamada');
+
+    const atividadesDiv = document.getElementById('calendario');
+
+    // Criando novos campos para Data/Horário e Descrição
+    const novaAtividade = `
+        <div class="atividade mb-3">
+            <div class="mb-3">
+                <label>Data/Horário:</label>
+                <input type="text" class="form-control" name="dataHorario[${atividadeIndex}]">
+            </div>
+            <div class="mb-3">
+                <label>Descrição:</label>
+                <textarea class="form-control" name="atividade[${atividadeIndex}]"></textarea>
+            </div>
+        </div>`;
+
+    atividadesDiv.insertAdjacentHTML('beforeend', novaAtividade);
+    atividadeIndex++;
+}
+</script>
+-->
 </body>
 </html>

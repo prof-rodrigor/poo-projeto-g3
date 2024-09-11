@@ -32,10 +32,14 @@ public class EditalController {
         Edital edital = new Edital();
         edital.setTitulo(ctx.formParam("titulo"));
         edital.setData(ctx.formParam("data"));
-        edital.setDescricao(ctx.formParam("descricao"));
         edital.setCalendario(ctx.formParam("calendario"));
+
+        /*edital.setCalendario(formatarCalendario(ctx));*/ //Chamando método de formatar o calendario
+
         edital.setPreRequisitos(ctx.formParam("pre-requisitos"));
         edital.setFormInscricao(ctx.formParam("formulario"));
+
+        edital.setDescricao(ctx.formParam("descricao"));
 
         String coordenadorId = ctx.formParam("coordenador");
         Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
@@ -62,7 +66,7 @@ public class EditalController {
         updateEdital.setPreRequisitos(ctx.formParam("pre-requisitos"));
         updateEdital.setFormInscricao(ctx.formParam("formulario"));
 
-        String coordenadorId = ctx.formParam("coodenador");
+        String coordenadorId = ctx.formParam("coordenador");
         Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
                 .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
         editalService.editarEdital(id, updateEdital, coordenador);
@@ -88,5 +92,19 @@ public class EditalController {
         String id = ctx.pathParam("id");
         editalService.removerEdital(id);
         ctx.redirect("/editais");
+    }
+
+    private String formatarCalendario(Context ctx) {
+        StringBuilder calendario = new StringBuilder();
+        String[] dataHorario = ctx.formParams("dataHorario").toArray(new String[0]);
+        String[] atividade = ctx.formParams("atividade").toArray(new String[0]);
+
+        for (int i = 0; i < dataHorario.length; i++) {
+            calendario.append(dataHorario[i]).append(" - ").append(atividade[i]);
+            if (i < dataHorario.length - 1) {
+                calendario.append(" | ");
+            }
+        }
+        return calendario.toString();
     }
 }
