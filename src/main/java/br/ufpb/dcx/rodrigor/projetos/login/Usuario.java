@@ -4,11 +4,13 @@ public class Usuario {
     private String login;
     private String nome;
     private String senha;
+    private Role role;
 
-    public Usuario(String login, String nome, String senha) {
+    public Usuario(String login, String nome, String senha, Role role) {
         this.login = login;
         this.nome = nome;
         this.senha = senha;
+        this.role = role;
     }
 
     public Usuario() {
@@ -36,5 +38,13 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

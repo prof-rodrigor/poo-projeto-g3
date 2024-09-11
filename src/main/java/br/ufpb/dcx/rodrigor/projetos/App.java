@@ -156,6 +156,10 @@ public class App {
             if (!ctx.path().equals("/login") && ctx.sessionAttribute("usuario") == null) {
                 ctx.redirect("/login");
             }
+            // if (ctx.path().startsWith("/admin/novo") && usuario.getRole() != Role.ADMIN)
+            // {
+            // ctx.redirect("/forbidden"); //
+            // }
         });
         LoginController loginController = new LoginController();
         app.get("/", ctx -> ctx.redirect("/login"));
