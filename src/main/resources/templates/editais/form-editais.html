@@ -5,6 +5,7 @@
 </head>
 <body>
 <section>
+
     <h2 th:text="${edital.id != null ? 'Editar Edital' : 'Novo Edital'}" class="mt-5"></h2>
     <form th:action="@{${edital.id != null} ? '/editais/editar/' + ${edital.id} : '/editais'}" method="post">
     <div class="mb-3">

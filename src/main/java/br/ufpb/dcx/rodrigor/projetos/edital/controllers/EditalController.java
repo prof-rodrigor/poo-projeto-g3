@@ -66,6 +66,7 @@ public class EditalController {
         }
     }
 
+
     // Processa as mudanças
     public void editarEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());

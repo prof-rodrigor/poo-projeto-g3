@@ -8,7 +8,6 @@
 </head>
 <body>
 <h1>Detalhes do Edital</h1>
-
 <div class="edital-detalhes" th:if="${editais.isPresent()}">
     <h2 th:text="${editais.get().titulo}">Título do Edital</h2>
     <p><strong>Data:</strong> <span th:text="${editais.get().data}">Data do Edital</span></p>
