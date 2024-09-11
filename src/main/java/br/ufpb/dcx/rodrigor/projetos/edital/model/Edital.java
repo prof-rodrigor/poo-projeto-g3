@@ -60,10 +60,10 @@ public class Edital {
     }
 
     public void setDescricao(String descricao) {
-        if (descricao == null || descricao.length() > MAX_TITULO_LENGTH)
-            throw new IllegalArgumentException(
-                    "Tamanho da descricao invalida, a descricao nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
-                            + " caracteres.");
+//        if (descricao == null || descricao.length() > MAX_TITULO_LENGTH)
+//            throw new IllegalArgumentException(
+//                    "Tamanho da descricao invalida, a descricao nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
+//                            + " caracteres.");
         this.descricao = descricao;
     }
 

@@ -28,7 +28,6 @@ public class EditalController {
     public void adicionarEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
-        validacao(ctx);
         Edital edital = new Edital();
         edital.setTitulo(ctx.formParam("titulo"));
         edital.setData(ctx.formParam("data"));
@@ -53,10 +52,23 @@ public class EditalController {
         ctx.redirect("/editais");
     }
 
+    public void mostrarFormularioEditar(Context ctx) {
+        String id = ctx.pathParam("id");
+        EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
+        ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
+        Optional<Edital> edital = editalService.buscarEditalPorId(id);
+        if (edital.isPresent()) {
+            ctx.attribute("edital", edital.get());
+            ctx.attribute("professores", participanteService.listarProfessores());
+            ctx.render("/editais/form-editais.html");
+        } else {
+            ctx.status(404).result("Edital não encontrado.");
+        }
+    }
     public void editarEdital(Context ctx) {
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
-        validacao(ctx);
+
         String id = ctx.pathParam("id");
         Edital updateEdital = new Edital();
         updateEdital.setTitulo(ctx.formParam("titulo"));
