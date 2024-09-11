@@ -9,8 +9,10 @@ import java.util.Optional;
 public class Edital {
     private String id, titulo, data, descricao, calendario, preRequisitos, formInscricao;
     private Participante coordenador;
+    private static final int MAX_TITULO_LENGTH = 250;
 
-    public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos, String formInscricao, Participante coordenador) {
+    public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos,
+            String formInscricao, Participante coordenador) {
         this.id = id;
         this.titulo = titulo;
         this.data = data;
@@ -38,6 +40,10 @@ public class Edital {
     }
 
     public void setTitulo(String titulo) {
+        if (titulo == null || titulo.length() > MAX_TITULO_LENGTH)
+            throw new IllegalArgumentException(
+                    "Tamanho do titulo invalido, o titulo nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
+                            + " caracteres.");
         this.titulo = titulo;
     }
 
@@ -70,6 +76,10 @@ public class Edital {
     }
 
     public void setPreRequisitos(String preRequisitos) {
+        if (preRequisitos == null || preRequisitos.length() > MAX_TITULO_LENGTH)
+            throw new IllegalArgumentException(
+                    "Tamanho do pre-requisitos invalidos, nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
+                            + " caracteres. O cara não é a TI");
         this.preRequisitos = preRequisitos;
     }
 
@@ -78,6 +88,10 @@ public class Edital {
     }
 
     public void setFormInscricao(String formInscricao) {
+        if (formInscricao == null || formInscricao.length() > MAX_TITULO_LENGTH)
+            throw new IllegalArgumentException(
+                    "Tamanho do link do formulario invalido, nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
+                            + " caracteres.");
         this.formInscricao = formInscricao;
     }
 
