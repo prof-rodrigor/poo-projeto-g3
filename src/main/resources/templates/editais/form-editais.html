@@ -7,9 +7,13 @@
 <section>
     <h2 class="mt-5">Novo Edital</h2>
     <form action="/editais" method="post">
+        <div th:if="${erro}" class="alert alert-danger" role="alert">
+            <p th:text="${erro}"></p>
+        </div>
         <div class="mb-3">
             <label for="titulo" class="form-label">Título do Edital:</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" required>
+            <input type="text" class="form-control" id="titulo" name="titulo" maxlength="250" required>
+            <small>Máximo de 250 caracteres permitido</small>
         </div>
         <div class="mb-3">
             <label for="data" class="form-label">Data:</label>
@@ -17,7 +21,8 @@
         </div>
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="250" required></textarea>
+            <small>Máximo de 250 caracteres permitido</small>
         </div>
         <div class="mb-3">
             <label for="calendario" class="form-label">Calendário:</label>
@@ -40,11 +45,13 @@
         </div>-->
         <div class="mb-3">
             <label for="pre-requisitos" class="form-label">Pré-requisitos:</label>
-            <input type="text" class="form-control" id="pre-requisitos" name="pre-requisitos" required>
+            <input type="text" class="form-control" id="pre-requisitos" name="pre-requisitos" maxlength="250" required>
+            <small>Máximo de 250 caracteres permitido</small>
         </div>
         <div class="mb-3">
             <label for="formulario" class="form-label">Formulário de Inscrição:</label>
-            <input type="text" class="form-control" id="formulario" name="formulario" required>
+            <input type="text" class="form-control" id="formulario" name="formulario" maxlength="250" required>
+            <small>Máximo de 250 caracteres permitido</small>
         </div>
         <div class="mb-3">
             <label for="coordenador" class="form-label">Coordenador</label>
