@@ -8,7 +8,6 @@ import io.javalin.http.Context;
 
 public class ParticipanteController {
 
-
     public ParticipanteController() {
     }
 
