@@ -53,10 +53,13 @@ public class EditalController {
     public void mostrarFormularioEditar(Context ctx){
         String id = ctx.pathParam("id");
         EditalService editalService = ctx.appData(Keys.EDITAL_SERVICE.key());
+        ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
+
         Optional<Edital> edital = editalService.buscarEditalPorId(id);
 
         if (edital.isPresent()) {
             ctx.attribute("edital", edital.get());
+            ctx.attribute("professores", participanteService.listarProfessores());
             ctx.render("/editais/form-editais.html");
         } else {
             ctx.status(404).result("Edital não encontrado.");

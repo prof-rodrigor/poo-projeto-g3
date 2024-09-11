@@ -6,37 +6,39 @@
 <body>
 <section>
     <h2 th:text="${edital.id != null ? 'Editar Edital' : 'Novo Edital'}" class="mt-5"></h2>
-    <form th:action="@{${edital.id != null ? '/editais/' + edital.id + '/editar' : '/editais'}}" method="post">
-        <div class="mb-3">
+    <form th:action="@{${edital.id != null} ? '/editais/editar/' + ${edital.id} : '/editais'}" method="post">
+    <div class="mb-3">
             <label for="titulo" class="form-label">Título do Edital:</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" required>
+            <input type="text" class="form-control" id="titulo" name="titulo" th:value="${edital.titulo}" required>
         </div>
         <div class="mb-3">
             <label for="data" class="form-label">Data:</label>
-            <input type="date" class="form-control" id="data" name="data" required>
+            <input type="date" class="form-control" id="data" name="data" th:value="${edital.data}" required>
         </div>
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" th:text="${edital.descricao}" required></textarea>
         </div>
         <div class="mb-3">
             <label for="calendario" class="form-label">Calendário:</label>
-            <input type="text" class="form-control" id="calendario" name="calendario" required>
+            <input type="text" class="form-control" id="calendario" name="calendario" th:value="${edital.calendario}" required>
         </div>
         <div class="mb-3">
             <label for="pre-requisitos" class="form-label">Pré-requisitos:</label>
-            <input type="text" class="form-control" id="pre-requisitos" name="pre-requisitos" required>
+            <input type="text" class="form-control" id="pre-requisitos" name="pre-requisitos" th:value="${edital.preRequisitos}" required>
         </div>
         <div class="mb-3">
             <label for="formulario" class="form-label">Formulário de Inscrição:</label>
-            <input type="text" class="form-control" id="formulario" name="formulario" required>
+            <input type="text" class="form-control" id="formulario" name="formulario" th:value="${edital.formInscricao}" required>
         </div>
         <div class="mb-3">
             <label for="coordenador" class="form-label">Coordenador</label>
             <select class="form-select" id="coordenador" name="coordenador" required>
                 <option value="">Selecione um coordenador</option>
                 <th:block th:each="professor : ${professores}">
-                    <option th:value="${professor.id}" th:text="${professor.nome}"></option>
+                    <option th:value="${professor.id}" th:text="${professor.nome}"
+                            th:selected="${edital.coordenador != null and professor.id == edital.coordenador.id}">
+                    </option>
                 </th:block>
             </select>
         </div>
