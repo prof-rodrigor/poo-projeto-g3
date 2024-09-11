@@ -25,6 +25,9 @@
                     <a class="btn btn-info btn-sm" th:href="@{/editais/detalhe/{id}(id=${edital.id})}" role="button">
                         Detalhes
                     </a>
+                    <a class="btn btn-secondary btn-sm" th:href="@{/editais/editar/{id}(id=${edital.id})}" role="button">
+                        Editar
+                    </a>
                     <button class="btn btn-danger btn-sm" th:data-id="${edital.id}" onclick="removerEdital(this)">
                         Remover
                     </button>
