@@ -189,9 +189,9 @@ public class App {
 
         EditalController editalController = new EditalController();
         app.get("/editais", editalController::listarEditais);
+        app.post("/editais", editalController::adicionarEdital);
         app.get("/editais/novo", editalController::mostrarFormulario);
         app.get("/editais/detalhe/{id}", editalController::exibirDetalhesEdital);
-        app.post("/editais", editalController::adicionarEdital);
         app.get("/editais/{id}/remover", editalController::removerEdital);
         app.get("/editais/editar/{id}", editalController::mostrarFormularioEditar);
         app.post("/editais/editar/{id}", editalController::editarEdital);

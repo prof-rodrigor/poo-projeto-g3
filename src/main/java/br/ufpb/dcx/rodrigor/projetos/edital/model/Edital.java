@@ -1,15 +1,15 @@
 package br.ufpb.dcx.rodrigor.projetos.edital.model;
 
 import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
-import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
-
-import java.util.List;
-import java.util.Optional;
 
 public class Edital {
     private String id, titulo, data, descricao, calendario, preRequisitos, formInscricao;
     private Participante coordenador;
+
     private static final int MAX_TITULO_LENGTH = 250;
+    private static final int MAX_DESCRICAO_LENGTH = 1000;
+    private static final int MAX_PREREQUISITOS_LENGTH = 800;
+    private static final int MAX_FORMINSCRICAO_LENGTH = 600;
 
     public Edital(String id, String titulo, String data, String descricao, String calendario, String preRequisitos,
             String formInscricao, Participante coordenador) {
@@ -40,10 +40,10 @@ public class Edital {
     }
 
     public void setTitulo(String titulo) {
-        if (titulo == null || titulo.length() > MAX_TITULO_LENGTH)
-            throw new IllegalArgumentException(
-                    "Tamanho do titulo invalido, o titulo nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
-                            + " caracteres.");
+        if (titulo.isBlank())
+            throw new IllegalArgumentException("O título não pode estar vazio");
+        if (titulo.length() > MAX_TITULO_LENGTH)
+            throw new IllegalArgumentException("O título não pode ter mais de 250 caracteres");
         this.titulo = titulo;
     }
 
@@ -60,10 +60,10 @@ public class Edital {
     }
 
     public void setDescricao(String descricao) {
-//        if (descricao == null || descricao.length() > MAX_TITULO_LENGTH)
-//            throw new IllegalArgumentException(
-//                    "Tamanho da descricao invalida, a descricao nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
-//                            + " caracteres.");
+        if (descricao.isBlank())
+            throw new IllegalArgumentException("A descrição não pode estar vazio");
+        if (descricao.length() > MAX_DESCRICAO_LENGTH)
+            throw new IllegalArgumentException("A descrição não pode ter mais de 1000 caracteres");
         this.descricao = descricao;
     }
 
@@ -80,10 +80,10 @@ public class Edital {
     }
 
     public void setPreRequisitos(String preRequisitos) {
-        if (preRequisitos == null || preRequisitos.length() > MAX_TITULO_LENGTH)
-            throw new IllegalArgumentException(
-                    "Tamanho do pre-requisitos invalidos, nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
-                            + " caracteres. O cara não é a TI");
+        if (preRequisitos.isBlank())
+            throw new IllegalArgumentException("Os pré-requisitos não podem estar vazio");
+        if (preRequisitos.length() > MAX_PREREQUISITOS_LENGTH)
+            throw new IllegalArgumentException("Os pré-requisitos não podem ter mais de 800 caracteres");
         this.preRequisitos = preRequisitos;
     }
 
@@ -92,10 +92,10 @@ public class Edital {
     }
 
     public void setFormInscricao(String formInscricao) {
-        if (formInscricao == null || formInscricao.length() > MAX_TITULO_LENGTH)
-            throw new IllegalArgumentException(
-                    "Tamanho do link do formulario invalido, nao pode ser Null e deve ter no maximo" + MAX_TITULO_LENGTH
-                            + " caracteres.");
+        if (formInscricao.isBlank())
+            throw new IllegalArgumentException("O formulário de inscrição não pode estar vazio");
+        if (formInscricao.length() > MAX_FORMINSCRICAO_LENGTH)
+            throw new IllegalArgumentException("O formulário de inscrição não pode ter mais de 600 caracteres");
         this.formInscricao = formInscricao;
     }
 

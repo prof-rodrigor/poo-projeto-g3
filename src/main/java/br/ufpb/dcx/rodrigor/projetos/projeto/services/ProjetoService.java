@@ -94,7 +94,7 @@ public class ProjetoService extends AbstractService {
         doc.put("dataEncerramento", java.util.Date.from(projeto.getDataEncerramento().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()));
 
         if (projeto.getCoordenador() != null) {
-            doc.put("coordenador", new ObjectId(String.valueOf(projeto.getCoordenador().getId())));
+            doc.put("coordenador", new ObjectId((projeto.getCoordenador().getId()).toString()));
         }
 
         return doc;
