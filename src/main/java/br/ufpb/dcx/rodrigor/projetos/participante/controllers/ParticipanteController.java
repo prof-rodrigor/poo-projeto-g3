@@ -5,6 +5,7 @@ import br.ufpb.dcx.rodrigor.projetos.participante.model.CategoriaParticipante;
 import br.ufpb.dcx.rodrigor.projetos.participante.model.Participante;
 import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
 import io.javalin.http.Context;
+import java.util.*;
 
 public class ParticipanteController {
 
@@ -24,15 +25,28 @@ public class ParticipanteController {
 
     public void adicionarParticipante(Context ctx) {
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
-        Participante participante = new Participante();
-        participante.setNome(ctx.formParam("nome"));
-        participante.setSobrenome(ctx.formParam("sobrenome"));
-        participante.setEmail(ctx.formParam("email"));
-        participante.setTelefone(ctx.formParam("telefone"));
-        participante.setCategoria(CategoriaParticipante.valueOf(ctx.formParam("categoria")));
+        try {
+            Participante participante = new Participante();
+            participante.setNome(ctx.formParam("nome"));
+            participante.setSobrenome(ctx.formParam("sobrenome"));
+            participante.setEmail(ctx.formParam("email"));
+            participante.setTelefone(ctx.formParam("telefone"));
+            participante.setCategoria(CategoriaParticipante.valueOf(ctx.formParam("categoria")));
 
-        participanteService.adicionarParticipante(participante);
-        ctx.redirect("/participantes");
+            participanteService.adicionarParticipante(participante);
+            ctx.redirect("/participantes");
+
+        } catch (IllegalArgumentException e) {
+            Map<String, String> formData = new HashMap<>();
+            ctx.formParamMap().forEach((key, value) -> formData.put(key, value.get(0)));
+            ctx.attribute("erro", e.getMessage());
+            ctx.attribute("participante", formData);
+
+            List<CategoriaParticipante> categorias = Arrays.asList(CategoriaParticipante.values());
+            ctx.attribute("categorias", categorias);
+            ctx.render("/participantes/formulario_participante.html");
+        }
+
     }
 
     public void removerParticipante(Context ctx) {
