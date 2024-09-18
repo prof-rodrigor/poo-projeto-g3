@@ -6,31 +6,39 @@
 <body>
 <section>
     <h2 class="mt-5">Novo Projeto</h2>
+
+    <!-- Exibir erros, se houver -->
+    <div th:if="${erro != null}">
+        <div class="alert alert-danger">
+            <p th:text="${erro}"></p>
+        </div>
+    </div>
+
     <form action="/projetos" method="post">
         <div class="mb-3">
             <label for="nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+            <input type="text" class="form-control" id="nome" name="nome" th:value="${nome}" required>
         </div>
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" th:text="${descricao}" required></textarea>
         </div>
         <div class="mb-3">
             <label for="coordenador" class="form-label">Coordenador</label>
             <select class="form-select" id="coordenador" name="coordenador" required>
                 <option value="">Selecione um coordenador</option>
                 <th:block th:each="professor : ${professores}">
-                    <option th:value="${professor.id}" th:text="${professor.nome}"></option>
+                    <option th:value="${professor.id}" th:text="${professor.nome}" th:selected="${professor.id == coordenadorId}"></option>
                 </th:block>
             </select>
         </div>
         <div class="mb-3">
             <label for="dataInicio" class="form-label">Data de Início</label>
-            <input type="date" class="form-control" id="dataInicio" name="dataInicio" required>
+            <input type="date" class="form-control" id="dataInicio" name="dataInicio" th:value="${dataInicio}" required>
         </div>
         <div class="mb-3">
             <label for="dataEncerramento" class="form-label">Data de Encerramento</label>
-            <input type="date" class="form-control" id="dataEncerramento" name="dataEncerramento" required>
+            <input type="date" class="form-control" id="dataEncerramento" name="dataEncerramento" th:value="${dataEncerramento}" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>

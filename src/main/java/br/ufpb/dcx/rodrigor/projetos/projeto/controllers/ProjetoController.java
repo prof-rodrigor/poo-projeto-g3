@@ -9,6 +9,7 @@ import br.ufpb.dcx.rodrigor.projetos.projeto.services.ProjetoService;
 import io.javalin.http.Context;
 
 import java.time.LocalDate;
+import java.util.*;
 
 public class ProjetoController {
 
@@ -28,23 +29,42 @@ public class ProjetoController {
         ProjetoService projetoService = ctx.appData(Keys.PROJETO_SERVICE.key());
         ParticipanteService participanteService = ctx.appData(Keys.PARTICIPANTE_SERVICE.key());
 
-        Projeto projeto = new Projeto();
-        projeto.setNome(ctx.formParam("nome"));
-        projeto.setDescricao(ctx.formParam("descricao"));
-        projeto.setDataInicio(LocalDate.parse(ctx.formParam("dataInicio")));
-        projeto.setDataEncerramento(LocalDate.parse(ctx.formParam("dataEncerramento")));
+        try {
+            Projeto projeto = new Projeto();
+            projeto.setNome(ctx.formParam("nome"));
+            projeto.setDescricao(ctx.formParam("descricao"));
+            projeto.setDataInicio(LocalDate.parse(ctx.formParam("dataInicio")));
+            projeto.setDataEncerramento(LocalDate.parse(ctx.formParam("dataEncerramento")));
 
-        String coordenadorId = ctx.formParam("coordenador");
-        Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
-                .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
+            String coordenadorId = ctx.formParam("coordenador");
+            Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
+                    .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
 
-        if (coordenador.getCategoria() != CategoriaParticipante.PROFESSOR) {
-            throw new IllegalArgumentException("Somente professores podem ser coordenadores.");
+            if (coordenador.getCategoria() != CategoriaParticipante.PROFESSOR) {
+                throw new IllegalArgumentException("Somente professores podem ser coordenadores.");
+            }
+            projeto.setCoordenador(coordenador);
+            projetoService.adicionarProjeto(projeto);
+
+            // Redireciona para a página de projetos se tudo correr bem
+            ctx.redirect("/projetos");
+
+        } catch (IllegalArgumentException e) {
+            // Caso de erro: Volta ao formulário com dados preenchidos e mensagem de erro
+            Map<String, String> formData = new HashMap<>();
+            ctx.formParamMap().forEach((key, value) -> formData.put(key, value.get(0)));
+            String coordenadorId = ctx.formParam("coordenador");
+            Participante coordenador = participanteService.buscarParticipantePorId(coordenadorId)
+                    .orElseThrow(() -> new IllegalArgumentException("Coordenador não encontrado"));
+            formData.put("coordenador", coordenador.toString());
+
+            ctx.attribute("erro", e.getMessage());
+            ctx.attribute("edital", formData);
+            ctx.attribute("coordenadorGuardado", coordenador);
+
+            // Renderiza o formulário novamente com os dados e o erro
+            ctx.render("/projetos/form_projeto.html");
         }
-
-        projeto.setCoordenador(coordenador);
-        projetoService.adicionarProjeto(projeto);
-        ctx.redirect("/projetos");
     }
 
     public void removerProjeto(Context ctx) {

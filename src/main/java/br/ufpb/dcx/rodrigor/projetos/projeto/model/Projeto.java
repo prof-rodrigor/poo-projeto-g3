@@ -13,7 +13,11 @@ public class Projeto {
     private LocalDate dataInicio;
     private LocalDate dataEncerramento;
 
-    public Projeto(String id, String nome, String descricao, Participante coordenador, LocalDate dataInicio, LocalDate dataEncerramento) {
+    private static final int MAX_NAME_LENGTH = 250;
+    private static final int MAX_DESCRICAO_LENGTH = 1000;
+
+    public Projeto(String id, String nome, String descricao, Participante coordenador, LocalDate dataInicio,
+            LocalDate dataEncerramento) {
         this.id = id;
         this.nome = nome;
         this.coordenador = coordenador;
@@ -42,14 +46,19 @@ public class Projeto {
     }
 
     public void setCoordenador(Participante coordenador) {
-        if(!coordenador.getCategoria().equals(CategoriaParticipante.PROFESSOR)) {
-            throw new IllegalArgumentException("O coordenador deve ser um professor: "+coordenador);
+        if (!coordenador.getCategoria().equals(CategoriaParticipante.PROFESSOR)) {
+            throw new IllegalArgumentException("O coordenador deve ser um professor: " + coordenador);
         }
         this.coordenador = coordenador;
     }
 
     public void setNome(String nome) {
+        if (nome.isBlank())
+            throw new IllegalArgumentException("O nome não pode estar vazio");
+        if (nome.length() > MAX_NAME_LENGTH)
+            throw new IllegalArgumentException("O nome não pode ter mais de 250 caracteres");
         this.nome = nome;
+
     }
 
     public String getDescricao() {
@@ -57,6 +66,10 @@ public class Projeto {
     }
 
     public void setDescricao(String descricao) {
+        if (descricao.isBlank())
+            throw new IllegalArgumentException("O nome não pode estar vazio");
+        if (descricao.length() > MAX_DESCRICAO_LENGTH)
+            throw new IllegalArgumentException("O nome não pode ter mais de 250 caracteres");
         this.descricao = descricao;
     }
 
