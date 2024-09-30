@@ -3,6 +3,7 @@ package br.ufpb.dcx.rodrigor.projetos;
 import br.ufpb.dcx.rodrigor.projetos.db.MongoDBConnector;
 import br.ufpb.dcx.rodrigor.projetos.edital.controllers.EditalController;
 import br.ufpb.dcx.rodrigor.projetos.edital.service.EditalService;
+import br.ufpb.dcx.rodrigor.projetos.form.controller.FormController;
 import br.ufpb.dcx.rodrigor.projetos.login.LoginController;
 import br.ufpb.dcx.rodrigor.projetos.participante.controllers.ParticipanteController;
 import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
@@ -175,18 +176,21 @@ public class App {
             }
         });
 
+        // Rotas para o controlador de projeto
         ProjetoController projetoController = new ProjetoController();
         app.get("/projetos", projetoController::listarProjetos);
         app.get("/projetos/novo", projetoController::mostrarFormulario);
         app.post("/projetos", projetoController::adicionarProjeto);
         app.get("/projetos/{id}/remover", projetoController::removerProjeto);
 
+        // Rotas para o controlador de participante
         ParticipanteController participanteController = new ParticipanteController();
         app.get("/participantes", participanteController::listarParticipantes);
         app.get("/participantes/novo", participanteController::mostrarFormularioCadastro);
         app.post("/participantes", participanteController::adicionarParticipante);
         app.get("/participantes/{id}/remover", participanteController::removerParticipante);
 
+        // Rotas para o controlador de edital
         EditalController editalController = new EditalController();
         app.get("/editais", editalController::listarEditais);
         app.post("/editais", editalController::adicionarEdital);
@@ -195,6 +199,11 @@ public class App {
         app.get("/editais/{id}/remover", editalController::removerEdital);
         app.get("/editais/editar/{id}", editalController::mostrarFormularioEditar);
         app.post("/editais/editar/{id}", editalController::editarEdital);
+
+        // Rotas para o controlador de formulários
+        FormController formController = new FormController();
+        app.get("/form/{formId}", formController::abrirFormulario);
+        app.post("/form/{formId}", formController::validarFormulario);
     }
 
     private Properties carregarPropriedades() {

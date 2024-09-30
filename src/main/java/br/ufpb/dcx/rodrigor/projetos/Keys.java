@@ -10,7 +10,8 @@ public enum Keys {
     MONGO_DB(new Key<MongoDBConnector>("mongo-db")),
     EDITAL_SERVICE(new Key<EditalService>("editais-service")),
     PROJETO_SERVICE(new Key<ProjetoService>("projeto-service")),
-    PARTICIPANTE_SERVICE(new Key<ParticipanteService>("participante-service"))
+    PARTICIPANTE_SERVICE(new Key<ParticipanteService>("participante-service")),
+    FORM_SERVICE(new Key<ParticipanteService>("form-service")),
     ;
 
     private final Key<?> k;
