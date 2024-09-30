@@ -27,7 +27,8 @@
                 <td>
                     <span th:if="${projeto.coordenador != null}" th:text="${projeto.coordenador.nome}"></span>
                     <span th:if="${projeto.coordenador == null}" style="font-weight: bold;">Sem coordenador</span>
-                </td>                <td th:text="${projeto.dataInicio}">01/01/2023</td>
+                </td>
+                <td th:text="${projeto.dataInicio}">01/01/2023</td>
                 <td th:text="${projeto.dataEncerramento}">31/12/2023</td>
                 <td>
                     <button class="btn btn-danger btn-sm" th:data-id="${projeto.id}" onclick="removerProjeto(this)">

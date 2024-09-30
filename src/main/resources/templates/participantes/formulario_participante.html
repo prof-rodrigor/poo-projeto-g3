@@ -7,22 +7,32 @@
 <body>
 <section>
     <h2 class="mt-5">Cadastro de Participante</h2>
+
+    <!-- Exibe erros se existirem -->
+    <div th:if="${erro}" class="alert alert-danger" role="alert">
+        <p th:text="${erro}"></p>
+    </div>
+
     <form action="/participantes" method="post">
         <div class="mb-3">
             <label for="nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+            <!-- Mantém o valor do campo nome caso ocorra um erro -->
+            <input type="text" class="form-control" id="nome" name="nome" th:value="${nome}" required>
         </div>
         <div class="mb-3">
             <label for="sobrenome" class="form-label">Sobrenome</label>
-            <input type="text" class="form-control" id="sobrenome" name="sobrenome" required>
+            <!-- Mantém o valor do campo sobrenome caso ocorra um erro -->
+            <input type="text" class="form-control" id="sobrenome" name="sobrenome" th:value="${sobrenome}" required>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <!-- Mantém o valor do campo email caso ocorra um erro -->
+            <input type="email" class="form-control" id="email" name="email" th:value="${email}" required>
         </div>
         <div class="mb-3">
             <label for="telefone" class="form-label">Telefone</label>
-            <input type="text" class="form-control" id="telefone" name="telefone" required>
+            <!-- Mantém o valor do campo telefone caso ocorra um erro -->
+            <input type="text" class="form-control" id="telefone" name="telefone" th:value="${telefone}" required>
         </div>
         <div class="mb-3">
             <label for="categoria" class="form-label">Categoria</label>

@@ -8,11 +8,11 @@ public class LoginController {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
     // Usuário de exemplo para autenticação
-    private final Usuario usuarioExemplo = new Usuario("admin", "Administrador", "admin");
+    private final Usuario usuarioExemplo = new Usuario("admin", "Administrador", "admin", Role.ADM);
 
     public void mostrarPaginaLogin(Context ctx) {
         String teste = ctx.queryParam("teste");
-        if(teste != null){
+        if (teste != null) {
             throw new RuntimeException("Erro de teste a partir do /login?teste=1");
         }
 

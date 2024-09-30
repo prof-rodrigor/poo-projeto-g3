@@ -1,7 +1,9 @@
 package br.ufpb.dcx.rodrigor.projetos;
 
 import br.ufpb.dcx.rodrigor.projetos.db.MongoDBConnector;
-import br.ufpb.dcx.rodrigor.projetos.edital.services.EditalService;
+import br.ufpb.dcx.rodrigor.projetos.edital.controllers.EditalController;
+import br.ufpb.dcx.rodrigor.projetos.edital.service.EditalService;
+import br.ufpb.dcx.rodrigor.projetos.form.controller.FormController;
 import br.ufpb.dcx.rodrigor.projetos.login.LoginController;
 import br.ufpb.dcx.rodrigor.projetos.participante.controllers.ParticipanteController;
 import br.ufpb.dcx.rodrigor.projetos.participante.services.ParticipanteService;
@@ -45,19 +47,29 @@ public class App {
             logger.error("Erro não tratado", e);
             ctx.status(500);
         });
+
     }
+
     private void registrarServicos(JavalinConfig config, MongoDBConnector mongoDBConnector) {
-        EditalService editalService = new EditalService(mongoDBConnector);
-        ParticipanteService participanteService = new ParticipanteService(mongoDBConnector);
+        /* EditalService editalService = new EditalService(mongoDBConnector); */
+        ParticipanteService participanteService = new ParticipanteService("http://localhost:8000");
         config.appData(Keys.PROJETO_SERVICE.key(), new ProjetoService(mongoDBConnector, participanteService));
+        config.appData(Keys.EDITAL_SERVICE.key(), new EditalService(mongoDBConnector, participanteService));
         config.appData(Keys.PARTICIPANTE_SERVICE.key(), participanteService);
-        config.appData(Keys.EDITAIS_SERVICE.key(), editalService);
+
+        /*
+         * config.appData(Keys.EDITAIS_SERVICE.key(), editalService);
+         */
     }
+
     private void configurarPaginasDeErro(Javalin app) {
         app.error(404, ctx -> ctx.render("erro_404.html"));
         app.error(500, ctx -> ctx.render("erro_500.html"));
     }
 
+    private void getAutentication() {
+
+    }
     private Javalin inicializarJavalin() {
         int porta = obterPortaServidor();
 
@@ -99,7 +111,8 @@ public class App {
             try {
                 return Integer.parseInt(propriedades.getProperty(PROP_PORTA_SERVIDOR));
             } catch (NumberFormatException e) {
-                logger.error("Porta definida no arquivo de propriedades não é um número válido: '{}'", propriedades.getProperty(PROP_PORTA_SERVIDOR));
+                logger.error("Porta definida no arquivo de propriedades não é um número válido: '{}'",
+                        propriedades.getProperty(PROP_PORTA_SERVIDOR));
                 System.exit(1);
             }
         } else {
@@ -124,7 +137,8 @@ public class App {
         String connectionString = propriedades.getProperty(PROP_MONGODB_CONNECTION_STRING);
         logger.info("Lendo string de conexão ao MongoDB a partir do application.properties");
         if (connectionString == null) {
-            logger.error("O string de conexão ao MongoDB não foi definido no arquivo /src/main/resources/application.properties");
+            logger.error(
+                    "O string de conexão ao MongoDB não foi definido no arquivo /src/main/resources/application.properties");
             logger.error("Defina a propriedade '{}' no arquivo de propriedades", PROP_MONGODB_CONNECTION_STRING);
             System.exit(1);
         }
@@ -141,6 +155,16 @@ public class App {
     }
 
     private void configurarRotas(Javalin app) {
+        app.before(ctx -> {
+            // Se a rota não for /login e o usuário não estiver autenticado
+            if (!ctx.path().equals("/login") && ctx.sessionAttribute("usuario") == null) {
+                ctx.redirect("/login");
+            }
+            // if (ctx.path().startsWith("/admin/novo") && usuario.getRole() != Role.ADMIN)
+            // {
+            // ctx.redirect("/forbidden"); //
+            // }
+        });
         LoginController loginController = new LoginController();
         app.get("/", ctx -> ctx.redirect("/login"));
         app.get("/login", loginController::mostrarPaginaLogin);
@@ -155,26 +179,43 @@ public class App {
             }
         });
 
+        // Rotas para o controlador de projeto
         ProjetoController projetoController = new ProjetoController();
         app.get("/projetos", projetoController::listarProjetos);
         app.get("/projetos/novo", projetoController::mostrarFormulario);
         app.post("/projetos", projetoController::adicionarProjeto);
         app.get("/projetos/{id}/remover", projetoController::removerProjeto);
 
+        // Rotas para o controlador de participante
         ParticipanteController participanteController = new ParticipanteController();
         app.get("/participantes", participanteController::listarParticipantes);
         app.get("/participantes/novo", participanteController::mostrarFormularioCadastro);
         app.post("/participantes", participanteController::adicionarParticipante);
         app.get("/participantes/{id}/remover", participanteController::removerParticipante);
 
+        // Rotas para o controlador de edital
+        EditalController editalController = new EditalController();
+        app.get("/editais", editalController::listarEditais);
+        app.post("/editais", editalController::adicionarEdital);
+        app.get("/editais/novo", editalController::mostrarFormulario);
+        app.get("/editais/detalhe/{id}", editalController::exibirDetalhesEdital);
+        app.get("/editais/{id}/remover", editalController::removerEdital);
+        app.get("/editais/editar/{id}", editalController::mostrarFormularioEditar);
+        app.post("/editais/editar/{id}", editalController::editarEdital);
+
+        // Rotas para o controlador de formulários
+        FormController formController = new FormController();
+        app.get("/form/{formId}", formController::abrirFormulario);
+        app.post("/form/{formId}", formController::validarFormulario);
     }
 
     private Properties carregarPropriedades() {
         Properties prop = new Properties();
         try (InputStream input = App.class.getClassLoader().getResourceAsStream("application.properties")) {
-            if(input == null){
+            if (input == null) {
                 logger.error("Arquivo de propriedades /src/main/resources/application.properties não encontrado");
-                logger.error("Use o arquivo application.properties.examplo como base para criar o arquivo application.properties");
+                logger.error(
+                        "Use o arquivo application.properties.examplo como base para criar o arquivo application.properties");
                 System.exit(1);
             }
             prop.load(input);
