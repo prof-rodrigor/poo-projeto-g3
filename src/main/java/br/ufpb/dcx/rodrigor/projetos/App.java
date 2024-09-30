@@ -52,7 +52,7 @@ public class App {
 
     private void registrarServicos(JavalinConfig config, MongoDBConnector mongoDBConnector) {
         /* EditalService editalService = new EditalService(mongoDBConnector); */
-        ParticipanteService participanteService = new ParticipanteService(mongoDBConnector);
+        ParticipanteService participanteService = new ParticipanteService("http://localhost:8000");
         config.appData(Keys.PROJETO_SERVICE.key(), new ProjetoService(mongoDBConnector, participanteService));
         config.appData(Keys.EDITAL_SERVICE.key(), new EditalService(mongoDBConnector, participanteService));
         config.appData(Keys.PARTICIPANTE_SERVICE.key(), participanteService);
@@ -67,6 +67,9 @@ public class App {
         app.error(500, ctx -> ctx.render("erro_500.html"));
     }
 
+    private void getAutentication() {
+
+    }
     private Javalin inicializarJavalin() {
         int porta = obterPortaServidor();
 
